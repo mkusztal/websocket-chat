@@ -1,7 +1,7 @@
 // reference
 const loginForm = document.getElementById('welcome-form');
 const messagesSection = document.getElementById('messages-section');
-const messagesList = document.getElementById('message-list');
+const messagesList = document.getElementById('messages-list');
 const addMessageForm = document.getElementById('add-messages-form');
 const userNameInput = document.getElementById('username');
 const messageContentInput = document.getElementById('message-content');
@@ -42,7 +42,7 @@ const addMessage = (author, content) => {
 const sendMessage = (e) => {
   e.preventDefault();
 
-  if ((messageContentInput.value = '')) {
+  if (messageContentInput.value == '') {
     alert('Field is empty!');
   } else {
     userName = messageContentInput.value;
