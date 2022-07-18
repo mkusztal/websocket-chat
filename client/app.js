@@ -10,8 +10,6 @@ const messageContentInput = document.getElementById('message-content');
 
 let userName = '';
 
-socket.on('message', ({ author, content }) => addMessage(author, content));
-
 const login = (e) => {
   e.preventDefault();
 
