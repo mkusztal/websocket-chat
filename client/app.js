@@ -1,4 +1,5 @@
 const socket = io();
+socket.on('message', ({author, content}) => addMessage(author, content));
 
 // reference
 const loginForm = document.getElementById('welcome-form');
@@ -19,6 +20,7 @@ const login = (e) => {
     userName = userNameInput.value;
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
+    socket.emit('join', userName);
   }
 };
 

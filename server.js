@@ -9,10 +9,10 @@ let messages = [];
 let users = [];
 
 //middleware
-app.use(express.static(path.join(__dirname, 'client')));
+app.use(express.static(path.join(__dirname, '/client')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/client/index.htm  l'));
+  res.sendFile(path.join(__dirname, '/client/index.html'));
 });
 
 app.use((req, res) => {
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     users.push({ name: userName, id: socket.id });
     socket.broadcast.emit('message', {
       author: 'ChatBot',
-      content: `${userName} has joined the conversation`,
+      content: `<i>${userName} has joined the conversation`,
     });
   });
 
@@ -42,11 +42,15 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', message);
   });
 
-  socket.on('disconnect', (userName) => {
-    console.log('Oh, socket' + socket.id + ' has left');
-    socket.emit('message', {
-      author: 'ChatBot',
-      content: `${userName} has left the conversation`,
+  socket.on('disconnect', () => {
+    if(users.length > 0){
+      userName = users.filter((user) => user.id === socket.id)[0].name;
+      users = users.fileter((user) => user.id !== socket.id);
+      console.log('Oh, socket' + socket.id + ' has left');
+      socket.broadcast.emit('message', {
+        author: 'ChatBot',
+        content: `<i>${userName} has left the conversation...`,
     });
+  }
   });
 });
