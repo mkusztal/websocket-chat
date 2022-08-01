@@ -1,5 +1,4 @@
 const express = require('express');
-const { userInfo } = require('os');
 const path = require('path');
 const socket = require('socket.io');
 
@@ -43,14 +42,16 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    if(users.length > 0){
-      userName = users.filter((user) => user.id === socket.id)[0].name;
-      users = users.fileter((user) => user.id !== socket.id);
-      console.log('Oh, socket' + socket.id + ' has left');
-      socket.broadcast.emit('message', {
-        author: 'ChatBot',
-        content: `<i>${userName} has left the conversation...`,
-    });
-  }
+    if (users.length > 0) {
+      if ((users = users.filter((user) => user.id !== socket.id))) {
+        userName = users.filter((user) => user.id === socket.id)[0].name;
+
+        console.log('Oh, socket' + socket.id + ' has left');
+        socket.broadcast.emit('message', {
+          author: 'ChatBot',
+          content: `<i>${userName} has left the conversation...`,
+        });
+      }
+    }
   });
 });
