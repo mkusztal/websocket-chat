@@ -23,7 +23,6 @@ const server = app.listen(8000, () => {
 });
 
 const io = socket(server);
-const checkUsers = users.filter((user) => user.id !== socket.id);
 
 io.on('connection', (socket) => {
   console.log("New client! It's id - " + socket.id);
@@ -43,6 +42,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
+    const checkUsers = users.filter((user) => user.id !== socket.id);
+
     if (users.length > 0) {
       if (checkUsers) {
         userName = users.filter((user) => user.id === socket.id)[0].name;
