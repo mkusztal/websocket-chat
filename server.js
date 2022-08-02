@@ -42,12 +42,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    const checkUsers = users.filter((user) => user.id !== socket.id);
+    const checkingUsersId = users.filter((user) => user.id !== socket.id);
 
     if (users.length > 0) {
-      if (checkUsers) {
-        userName = users.filter((user) => user.id === socket.id)[0].name;
-
+      if (checkingUsersId) {
         console.log('Oh, socket' + socket.id + ' has left');
         socket.broadcast.emit('message', {
           author: 'ChatBot',
