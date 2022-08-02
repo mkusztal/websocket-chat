@@ -18,7 +18,7 @@ app.use((req, res) => {
   res.status(404).send('404 not found...');
 });
 
-const server = app.listen(8000, () => {
+const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server is running on port: 8000');
 });
 
@@ -41,12 +41,18 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', message);
   });
 
-  socket.on('disconnect', () => {
-    const checkingUsersId = users.filter((user) => user.id !== socket.id);
-
+  socket.on('disconnect', (userName) => {
+    const checkingUserId = users.filter((user) => user.id !== socket.id);
+    const currentUserArr = users.filter((user) => user.id === socket.id);
     if (users.length > 0) {
-      if (checkingUsersId) {
-        console.log('Oh, socket' + socket.id + ' has left');
+      if (checkingUserId) {
+        console.log("Client disconnected! It's id - " + socket.id);
+
+        // if (currentUserArr && currentUserArr.length == 0) {
+        const currentUser = currentUserArr[0];
+        userName = currentUser.name;
+        //}
+
         socket.broadcast.emit('message', {
           author: 'ChatBot',
           content: `<i>${userName} has left the conversation...`,
