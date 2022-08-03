@@ -41,23 +41,19 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', message);
   });
 
-  socket.on('disconnect', (userName) => {
-    const checkingUserId = users.filter((user) => user.id !== socket.id);
+  socket.on('disconnect', () => {
     const currentUserArr = users.filter((user) => user.id === socket.id);
-    if (users.length > 0) {
-      if (checkingUserId) {
-        console.log("Client disconnected! It's id - " + socket.id);
 
-        // if (currentUserArr && currentUserArr.length == 0) {
-        const currentUser = currentUserArr[0];
-        userName = currentUser.name;
-        //}
+    if (currentUserArr && currentUserArr.length == 1) {
+      const { name: userName } = currentUserArr[0];
 
-        socket.broadcast.emit('message', {
-          author: 'ChatBot',
-          content: `<i>${userName} has left the conversation...`,
-        });
-      }
+      socket.broadcast.emit('message', {
+        author: 'ChatBot',
+        content: `<i>${userName} has left the conversation...`,
+      });
+      console.log("Client disconnected! It's id - " + socket.id);
+    } else {
+      console.log('Client not found!');
     }
   });
 });
